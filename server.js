@@ -4,15 +4,15 @@ const passport = require("passport");
 const jwt = require("jsonwebtoken");
 const cors = require("cors");
 const connectDB = require("./db");
-app.set("trust proxy", 1);
+
 require("./passport");
 
 const app = express();
-app.set("trust proxy", 1);
 
+app.set("trust proxy", 1);
 app.use(cors());
 app.use(cors({
-  origin: "*"
+    origin: "*"
 }));
 app.use(passport.initialize());
 
