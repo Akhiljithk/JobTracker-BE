@@ -46,6 +46,9 @@ app.get(
 );
 
 app.use(express.json());
+app.get("/health", (req, res) => {
+  res.status(200).send("OK");
+});
 app.use("/api", require("./routes/extract"));
 app.use("/api", require("./routes/jobs"));
 
