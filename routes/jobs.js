@@ -50,4 +50,42 @@ router.delete("/jobs/:id", authenticate, async (req, res) => {
   }
 });
 
+router.patch("/jobs/:id/status", authenticate, async (req, res) => {
+  try {
+    const { status } = req.body;
+
+    if (!["Applied", "Interviewing", "Offer", "Rejected", "Ghosted"].includes(status)) {
+      return res.status(400).json({
+        success: false,
+        error: "Invalid status"
+      });
+    }
+
+    const job = await Job.findOneAndUpdate(
+      { _id: req.params.id, userId: req.user.id },
+      { status },
+      { new: true }
+    );
+
+    if (!job) {
+      return res.status(404).json({
+        success: false,
+        error: "Job not found"
+      });
+    }
+
+    res.json({
+      success: true,
+      job
+    });
+  } catch (err) {
+    console.error("Status update failed:", err);
+    res.status(500).json({
+      success: false,
+      error: "Failed to update status"
+    });
+  }
+});
+
+
 module.exports = router;

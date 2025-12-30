@@ -50,8 +50,11 @@ app.get("/health", (req, res) => {
   console.log('health checkup successful')
   res.status(200).send("OK");
 });
-app.use("/api", require("./routes/extract"));
+
+app.use("/api", require("./routes/extract")); 
+app.use("/api/linkedin", require("./routes/linkedin")); 
 app.use("/api", require("./routes/jobs"));
+app.use("/api", require("./routes/resumes"));
 
 const PORT = process.env.PORT || 5000;
 

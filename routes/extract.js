@@ -14,6 +14,7 @@ const client = new OpenAI({
 router.post("/extract", authenticate, async (req, res) => {
   try {
     const { pageText, sourceUrl } = req.body;
+    const { resumeId } = req.body;
 
     if (!pageText || pageText.length < 50) {
       return res.status(400).json({ error: "Insufficient page text" });
@@ -29,7 +30,6 @@ Rules:
 - Do NOT paraphrase
 - Do NOT summarize
 - Preserve original wording as much as possible
-- skills should be a list of technical skills only
 - Remove only obvious noise (navigation, footer, ads)
 
 Return ONLY valid JSON.
@@ -40,13 +40,11 @@ JSON format:
 {
   "companyName": "",
   "jobDescription": "",
-  "skills": [],
-  "aiSuggestion": ""
+  "jobTitle": "",
+  "location": "", 
+  "status": "Applied", 
+  "location": "", 
 }
-
-For aiSuggestion:
-- You MAY generate new text
-- Explain how to prepare for this interview
 
 Text:
 ${pageText.slice(0, 12000)}
@@ -66,6 +64,7 @@ ${pageText.slice(0, 12000)}
     const job = await Job.create({
         userId: req.user.id,
         ...jobData,
+        resumeId,
         sourceUrl
     });
 

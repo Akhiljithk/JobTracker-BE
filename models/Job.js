@@ -7,11 +7,22 @@ const jobSchema = new mongoose.Schema(
       ref: "User",
       required: true
     },
+    jobTitle: String,
     companyName: String,
     jobDescription: String,
-    skills: [String],
-    aiSuggestion: String,
+    companyLinkedinUrl: String,
+    resumeId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Resume",
+      default: null
+    },
     sourceUrl: String,
+    jobLocation: String,
+    status: { 
+      type: String, 
+      enum: ['Applied', 'Interviewing', 'Offer', 'Rejected', 'Ghosted'],
+      default: 'Applied' 
+    },  
     appliedDate: {
       type: Date,
       default: Date.now
@@ -21,3 +32,6 @@ const jobSchema = new mongoose.Schema(
 );
 
 module.exports = mongoose.model("Job", jobSchema);
+
+    // skills: [String], // future implemenation 
+    // aiSuggestion: String, // future implemenation 
