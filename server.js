@@ -15,6 +15,7 @@ app.use(cors({
     origin: "*"
 }));
 app.use(passport.initialize());
+app.use(express.urlencoded({ extended: true }));
 
 connectDB();
 

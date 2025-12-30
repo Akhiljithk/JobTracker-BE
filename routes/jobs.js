@@ -7,6 +7,7 @@ const router = express.Router();
 router.get("/jobs", authenticate, async (req, res) => {
   try {
     const jobs = await Job.find({ userId: req.user.id })
+      .populate("resumeId", "name fileUrl")
       .sort({ createdAt: -1 });
 
     res.json({
@@ -86,6 +87,5 @@ router.patch("/jobs/:id/status", authenticate, async (req, res) => {
     });
   }
 });
-
 
 module.exports = router;

@@ -14,7 +14,11 @@ const resumeSchema = new mongoose.Schema(
     fileUrl: {
       type: String, 
       required: true
-    }
+    },
+    isGlobal: {
+      type: Boolean,
+      default: true
+   },
   },
   { timestamps: true }
 );
