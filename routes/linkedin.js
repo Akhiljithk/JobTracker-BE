@@ -16,7 +16,6 @@ router.post("/save", authenticate, async (req, res) => {
       resumeId
     } = req.body;
 
-    console.log('here31')
     if (!jobTitle || !companyName || !jobDescription) {
       return res.status(400).json({
         success: false,

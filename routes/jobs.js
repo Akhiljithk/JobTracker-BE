@@ -6,13 +6,28 @@ const router = express.Router();
 
 router.get("/jobs", authenticate, async (req, res) => {
   try {
-    const jobs = await Job.find({ userId: req.user.id })
-      .populate("resumeId", "name fileUrl")
-      .sort({ createdAt: -1 });
+    const page = Math.max(parseInt(req.query.page) || 1, 1);
+    const limit = Math.min(parseInt(req.query.limit) || 10, 50);
+    const skip = (page - 1) * limit;
+
+    const [jobs, total] = await Promise.all([
+      Job.find({ userId: req.user.id })
+        .populate("resumeId")
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit),
+      Job.countDocuments({ userId: req.user.id })
+    ]);
 
     res.json({
       success: true,
-      jobs
+      jobs,
+      pagination: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit)
+      }
     });
   } catch (err) {
     console.error("Fetch jobs failed:", err);
