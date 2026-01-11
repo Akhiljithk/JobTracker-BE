@@ -1,10 +1,12 @@
-const express = require("express");
-const multer = require("multer");
-const authenticate = require("../authMiddleware");
-const Resume = require("../models/Resume");
-const { createClient } = require("@supabase/supabase-js");
-const Job = require("../models/Job");
-const router = express.Router();
+import { Router } from "express";
+import multer from "multer";
+import authenticate from "../authMiddleware.js";
+import Resume from "../models/Resume.js";
+import { createClient } from "@supabase/supabase-js";
+import Job from "../models/Job.js";
+
+const router = Router();
+const { memoryStorage } = multer;
 
 // Supabase client
 const supabase = createClient(
@@ -13,7 +15,7 @@ const supabase = createClient(
 );
 
 const upload = multer({
-    storage: multer.memoryStorage(),
+  storage: memoryStorage(),
   limits: { fileSize: 2 * 1024 * 1024 }, // 2MB
   fileFilter: (_, file, cb) => {
     if (file.mimetype !== "application/pdf") {
@@ -70,7 +72,7 @@ router.post(
   }
 );
 
-
+// GET Cvs
 router.get("/resumes", authenticate, async (req, res) => {
   const resumes = await Resume.find({ userId: req.user.id, isGlobal: true }).sort({
     createdAt: -1
@@ -79,7 +81,7 @@ router.get("/resumes", authenticate, async (req, res) => {
   res.json({ success: true, resumes });
 });
 
-// DELETE /api/resumes/:id
+// DELETE cv
 router.delete("/resumes/:id", authenticate, async (req, res) => {
   const resume = await Resume.findOne({
     _id: req.params.id,
@@ -115,10 +117,10 @@ router.post("/resumes/job/:jobId", authenticate, upload.single("resume"), async 
       return res.status(404).json({ error: "Job not found" });
     }
 
-    // delete old cv if it is non global
+    // delete old cv if it is non global cv
     if (job.resumeId && job.resumeId.isGlobal === false) {
       await deleteFromSupabase(job.resumeId.fileUrl);
-      await Resume.deleteOne({ _id: job.resumeId._id });
+      await job.resumeId.deleteOne();
     }
 
     const file = req.file;
@@ -187,4 +189,4 @@ async function deleteFromSupabase(fileUrl) {
 }
 
 
-module.exports = router;
+export default router;

@@ -1,18 +1,18 @@
-const mongoose = require("mongoose");
+import { Schema, model } from "mongoose";
 
-const jobSchema = new mongoose.Schema(
+const jobSchema = new Schema(
   {
     userId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "User",
       required: true
     },
     jobTitle: String,
-    companyName: String,
+    companyName: { type: String, default: "Processing..." },
     jobDescription: String,
     companyLinkedinUrl: String,
     resumeId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "Resume",
       default: null
     },
@@ -22,16 +22,25 @@ const jobSchema = new mongoose.Schema(
       type: String, 
       enum: ['Applied', 'Interviewing', 'Offer', 'Rejected', 'Ghosted'],
       default: 'Applied' 
+    },
+    aiProcessingStatus: { 
+      type: String, 
+      enum: ["Processing", "Saved", "Failed"], 
+      default: "Processing" 
     },  
     appliedDate: {
       type: Date,
       default: Date.now
-    }
+    },
+    aiMetadata: {
+      provider: { type: String }, 
+      extractionTime: { type: Number },
+    },
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Job", jobSchema);
+export default model("Job", jobSchema);
 
     // skills: [String], // future implemenation 
     // aiSuggestion: String, // future implemenation 

@@ -1,11 +1,16 @@
-require("dotenv").config();
-const express = require("express");
-const passport = require("passport");
-const jwt = require("jsonwebtoken");
-const cors = require("cors");
-const connectDB = require("./db");
-
-require("./passport");
+import dotenv from "dotenv";
+dotenv.config();
+import express, { urlencoded, json } from "express";
+import passport from 'passport';
+import jwt from 'jsonwebtoken';
+import cors from "cors";
+import connectDB from "./db.js";
+import "./passport-config.js";
+import extractRoutes from "./routes/extract.js";
+import linkedinRoutes from "./routes/linkedin.js";
+import jobsRoutes from "./routes/jobs.js";
+import resumeRoutes from "./routes/resumes.js";
+import './workers/extractionWorker.js';
 
 const app = express();
 
@@ -15,7 +20,7 @@ app.use(cors({
     origin: "*"
 }));
 app.use(passport.initialize());
-app.use(express.urlencoded({ extended: true }));
+app.use(urlencoded({ extended: true }));
 
 connectDB();
 
@@ -46,16 +51,16 @@ app.get(
   }
 );
 
-app.use(express.json());
+app.use(json());
 app.get("/health", (req, res) => {
   console.log('health checkup successful')
   res.status(200).send("OK");
 });
 
-app.use("/api", require("./routes/extract")); 
-app.use("/api/linkedin", require("./routes/linkedin")); 
-app.use("/api", require("./routes/jobs"));
-app.use("/api", require("./routes/resumes"));
+app.use("/api/ai", extractRoutes);
+app.use("/api/linkedin", linkedinRoutes);
+app.use("/api", jobsRoutes);
+app.use("/api", resumeRoutes);
 
 const PORT = process.env.PORT || 5000;
 

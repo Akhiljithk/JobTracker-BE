@@ -12,4 +12,4 @@ function safeJsonParse(text) {
   }
 }
 
-module.exports = safeJsonParse;
+export default safeJsonParse;

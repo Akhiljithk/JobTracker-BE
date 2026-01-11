@@ -1,8 +1,8 @@
-const express = require("express");
-const authenticate = require("../authMiddleware");
-const Job = require("../models/Job");
+import { Router } from "express";
+import authenticate from "../authMiddleware.js";
+import Job from "../models/Job.js";
 
-const router = express.Router();
+const router = Router();
 
 router.post("/save", authenticate, async (req, res) => {
   try {
@@ -49,4 +49,4 @@ router.post("/save", authenticate, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

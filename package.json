@@ -1,6 +1,7 @@
 {
   "name": "whereismyjob_backend",
   "version": "1.0.0",
+  "type": "module",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -9,16 +10,19 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
+    "@openrouter/sdk": "^0.3.11",
     "@supabase/supabase-js": "^2.89.0",
+    "compromise": "^14.14.5",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "express-fileupload": "^1.5.2",
+    "ioredis": "^5.9.1",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.0.2",
     "multer": "^2.0.2",
+    "node-nlp": "^5.0.0-alpha.5",
     "nodemon": "^3.1.11",
     "openai": "^6.15.0",
     "passport": "^0.7.0",
