@@ -64,7 +64,7 @@ async function extractWithOpenRouter(pageTextSnippet) {
 async function generateEmailWithAI(prompt) {
     try {
         const response = await openrouter.chat.send({
-            model: "xiaomi/mimo-v2-flash:free",
+            model: "openai/gpt-4o-mini",
             messages: [
                 {
                     role: "system",

@@ -19,6 +19,7 @@ const resumeSchema = new Schema(
       type: Boolean,
       default: true
    },
+   extractedText: String,
   },
   { timestamps: true }
 );

@@ -24,17 +24,29 @@ router.post("/generate-email", authenticate, async (req, res) => {
             resumeText = resume?.extractedText || "No resume text found.";
         }
 
-        const aiPrompt = `
-            DETERMINE IF THIS IS A JOB DESCRIPTION.
-            IF NOT, RESPOND ONLY WITH: INVALID_JOB
-            IF YES, WRITE A COLD EMAIL TO THE RECRUITER.
+    const prompt = `
+    You are an expert career assistant. I will provide you with text scraped from a website.
+    
+    CRITICAL INSTRUCTION:
+    The text may contain a list of multiple job search results. 
+    1. IGNORE the list of search results at the beginning.
+    2. LOCATE the section usually starting with "About the job" or a specific Job Title followed by a long description.
+    3. If you find a detailed Job Description (like the one for "Graduate Product Engineer at Intercom"), proceed to write the email.
+    4. ONLY respond with "INVALID_JOB" if there is absolutely no detailed job description text present.
 
-            RESUME CONTEXT: ${resumeText.slice(0, 2500)}
-            PAGE CONTENT: ${pageText}
-        `;
+    CANDIDATE CV:
+    ${resumeText}
+    
+    WEBSITE TEXT:
+    ${pageText.slice(0, 6000)}
+    
+    OUTPUT:
+    - If valid: Write a professional, punchy networking email.
+    - If invalid: "INVALID_JOB"
+    `;
 
         // CALL THE NEW SERVICE METHOD
-        const aiResponse = await generateEmailWithAI(aiPrompt);
+        const aiResponse = await generateEmailWithAI(prompt);
 
         if (aiResponse.includes("INVALID_JOB")) {
             return res.status(422).json({ 

@@ -4,6 +4,7 @@ import authenticate from "../authMiddleware.js";
 import Resume from "../models/Resume.js";
 import { createClient } from "@supabase/supabase-js";
 import Job from "../models/Job.js";
+import { PDFParse } from 'pdf-parse';
 
 const router = Router();
 const { memoryStorage } = multer;
@@ -35,8 +36,15 @@ router.post(
         return res.status(400).json({ error: "No file uploaded" });
       }
 
+      // pdf text extraction for later ai use 
       const fileName = `${req.user.id}/${Date.now()}-${req.file.originalname}`;
+      const fileBuffer = req.file.buffer;
+      
+      const parser = new PDFParse({ data: fileBuffer })
+      const parsedResult = await parser.getText();
+      const extractedText = parsedResult.text
 
+      await parser.destroy();
       // Upload to Supabase
       const { error } = await supabase.storage
         .from("resumes")
@@ -55,7 +63,8 @@ router.post(
       const resume = await Resume.create({
         userId: req.user.id,
         name: req.file.originalname,
-        fileUrl: data.publicUrl
+        fileUrl: data.publicUrl,
+        extractedText,
       });
 
       res.json({
