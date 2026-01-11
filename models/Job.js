@@ -35,7 +35,9 @@ const jobSchema = new Schema(
     aiMetadata: {
       provider: { type: String }, 
       extractionTime: { type: Number },
+      error: { type: String },
     },
+    rawPageTextForProcessing: String,
   },
   { timestamps: true }
 );
