@@ -61,4 +61,29 @@ async function extractWithOpenRouter(pageTextSnippet) {
     
 }
 
-export default { extractWithOpenRouter };
+async function generateEmailWithAI(prompt) {
+    try {
+        const response = await openrouter.chat.send({
+            model: "xiaomi/mimo-v2-flash:free",
+            messages: [
+                {
+                    role: "system",
+                    content: "You are an expert career coach. Your task is to write high-converting networking emails. If the input is not a job description, you must respond with INVALID_JOB."
+                },
+                {
+                    role: "user",
+                    content: prompt
+                }
+            ],
+            temperature: 0.7, // Higher temperature for more natural writing
+            max_tokens: 1000,
+        });
+
+        return response.choices[0].message.content;
+    } catch (err) {
+        console.error("OpenRouter Email Error:", err.message);
+        throw new Error(`Email generation failed: ${err.message}`);
+    }
+}
+
+export default { extractWithOpenRouter, generateEmailWithAI };
