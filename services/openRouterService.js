@@ -55,8 +55,8 @@ async function extractWithOpenRouter(pageTextSnippet) {
         
         return jsonString;
     } catch (err) {
-        console.error("OpenRouter API Error:", apiError.message);
-        throw new Error(`Extraction failed: ${apiError.message}`);
+        console.error("OpenRouter API Error:", err.message);
+        throw new Error(`Extraction failed: ${err.message}`);
     }
     
 }
