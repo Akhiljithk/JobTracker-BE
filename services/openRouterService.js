@@ -64,7 +64,7 @@ async function extractWithOpenRouter(pageTextSnippet) {
 async function generateEmailWithAI(prompt) {
     try {
         const response = await openrouter.chat.send({
-            model: "openai/gpt-4o-mini",
+            model: "qwen/qwen-2.5-7b-instruct",
             messages: [
                 {
                     role: "system",
