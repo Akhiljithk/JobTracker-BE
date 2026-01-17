@@ -11,6 +11,7 @@ import linkedinRoutes from "./routes/linkedin.js";
 import jobsRoutes from "./routes/jobs.js";
 import resumeRoutes from "./routes/resumes.js";
 import emailRoutes from "./routes/email.js";
+import quitCornRoutes from "./routes/quitCorn.js";
 import './workers/extractionWorker.js';
 
 const app = express();
@@ -63,6 +64,7 @@ app.use("/api/linkedin", linkedinRoutes);
 app.use("/api", jobsRoutes);
 app.use("/api", resumeRoutes);
 app.use("/api/email", emailRoutes);
+app.use("/api", quitCornRoutes);
 
 const PORT = process.env.PORT || 5000;
 
