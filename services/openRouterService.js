@@ -32,7 +32,7 @@ async function extractWithOpenRouter(pageTextSnippet) {
 
     try {
         const response = await openrouter.chat.send({
-            model: "xiaomi/mimo-v2-flash:free",
+            model: "xiaomi/mimo-v2-flash",
             messages: OpenRouterPrompt,
             response_format: { type: "json_object" },
             temperature: 0.1,
