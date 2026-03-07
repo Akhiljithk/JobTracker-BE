@@ -22,13 +22,15 @@ const worker = new Worker('extractionQueue', async (bullJob) => {
       console.log('[AI Worker] Attempting open router...')
       responseFromAi = await extractWithOpenRouter(pageText);
     } catch (e) {
-      try {
-        provider = "EC2-Llama";
-        console.error("[AI Worker] OpenRouter failed, switching to EC2 Fallback: ", e.message);
-        responseFromAi = await extractWithLlamacpp(pageText);
-      } catch (e) {
-        console.error("[AI Worker] EC2 Fallback also failed:", e.message);
-      }
+      
+      console.log("[AI Worker] OpenRouter failed:", e.message)
+      // try {
+      //   provider = "EC2-Llama";
+      //   console.error("[AI Worker] OpenRouter failed, switching to EC2 Fallback: ", e.message);
+      //   responseFromAi = await extractWithLlamacpp(pageText);
+      // } catch (e) {
+      //   console.error("[AI Worker] EC2 Fallback also failed:", e.message);
+      // }
     }
 
     const parsed = safeJsonParse(responseFromAi);
